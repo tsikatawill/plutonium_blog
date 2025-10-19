@@ -79,3 +79,5 @@ gem "tilt", "~> 2.6"
 gem "rodauth-rails", "~> 2.1"
 
 gem "pg", "~> 1.6"
+
+gem "sqlite3", "~> 2.7"

@@ -10,9 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_18_202030) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_18_210232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "blogging_comments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_blogging_comments_on_post_id"
+    t.index ["user_id"], name: "index_blogging_comments_on_user_id"
+  end
+
+  create_table "blogging_posts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "title", null: false
+    t.text "content", null: false
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_blogging_posts_on_user_id"
+  end
 
   create_table "user_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
@@ -44,6 +64,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_18_202030) do
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(status = ANY (ARRAY[1, 2]))"
   end
 
+  add_foreign_key "blogging_comments", "blogging_posts", column: "post_id"
+  add_foreign_key "blogging_comments", "users"
+  add_foreign_key "blogging_posts", "users"
   add_foreign_key "user_login_change_keys", "users", column: "id"
   add_foreign_key "user_password_reset_keys", "users", column: "id"
   add_foreign_key "user_remember_keys", "users", column: "id"
